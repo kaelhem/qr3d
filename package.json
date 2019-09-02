@@ -1,0 +1,22 @@
+{
+  "name": "qr3d",
+  "version": "1.0.0",
+  "description": "This library provides an automated process to create 3D printables QR codes on both NodeJS and web.",
+  "author": "kaelhem@gmail.com",
+  "license": "MIT",
+  "source": "src/index.js",
+  "main": "dist/qr3d.js",
+  "umd:main": "dist/qr3d.umd.js",
+  "unpkg": "dist/qr3d.umd.js",
+  "module": "dist/qr3d.m.js",
+  "scripts": {
+    "build": "microbundle --external all",
+    "dev": "microbundle watch"
+  },
+  "dependencies": {
+    "qrcode": "^1.4.1"
+  },
+  "devDependencies": {
+    "microbundle": "^0.12.0-next.6"
+  }
+}

@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="theme-color" content="#000000" />
+    <meta
+      name="description"
+      content="QR3D - web sample (es5)"
+    />
+    <title>QR3D - Sample</title>
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/file-saver@2.0.2/dist/FileSaver.min.js"></script>
+    <script type="text/javascript" src="../../dist/qr3d.umd.js"></script>
+    <script type="text/javascript">
+      
+      var createAndSaveQR3D = function() {
+        var text = document.getElementById('input').value
+        var qr3dAscii = qr3D(text, { base: 2, height: 2, bitSize: 4 });
+        var blob = new Blob([qr3dAscii], {type: "text/plain;charset=utf-8"});
+        saveAs(blob, "sample.stl");
+      }
+      
+    </script>
+  </head>
+  <body>
+    <span>String to encode in QRCode:</span>
+    <input type="text" id="input" />
+    <button onClick="createAndSaveQR3D()">create .stl</button>
+  </body>
+</html>
