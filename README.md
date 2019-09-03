@@ -1,3 +1,5 @@
+[![logo](https://raw.githubusercontent.com/kaelhem/qr3d/master/resources/qr3d-logo-256.png)]
+
 # qr3D
 
 A simple library to generate 3D printable QR codes on both NodeJS and browser web apps!
@@ -14,7 +16,7 @@ npm i qr3d --save
 yarn add qr3d
 ```
 
-## How it works?
+## Use
 
 ### NodeJs
 
@@ -43,19 +45,19 @@ saveAs(blob, 'sample.stl')
 ```
 --
 
-You can also have a look at the _samples_ folder.
+You can also have a look at the _samples_ folder for a [react sample](https://github.com/kaelhem/qr3d/blob/master/samples/web/sample-react.js).
 
-## Options
+### Options
 
-**qr3D** accepts 2 signatures:
+**qr3D** expose only one function (with the same name) which has 2 signatures:
 
 * qr3D(_stringToEncode_, _options_)
 * qr3D(_options_)
 
 _stringToEncode_ should be a string. It's the string to encode into QRCode.
-_options_ will copy this string into his "text" property.
+_options_ will copy this string into his "text" property. In this scenario, a given "text" in the _options_ object will be replaced.
 
-_options_ parameters are :
+The _options_ parameters are :
 
 |name|type|default value|description|
 |---|---|---|---|

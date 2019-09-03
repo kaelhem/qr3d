@@ -11,59 +11,57 @@ const defaultWalls = {
 const createCube = ({origins, size, height, walls = defaultWalls}) => {
   const [ posx, posy, posz ] = origins
   const shouldDraw = {...defaultWalls, ...walls}
+
   // drawFloor
   const facets = [{
-    normal: [0, -1, 0],
+    normal: [0, 0, -1],
     verts: [
       [posx, posy, posz],
-      [posx + size, posy, posz + size],
-      [posx, posy, posz + size]
+      [posx, posy + size, posz],
+      [posx + size, posy + size, posz],
     ],
     attributeByteCount: 0
   }, {
-    normal: [0, -1, 0],
+    normal: [0, 0, -1],
     verts: [
       [posx, posy, posz],
+      [posx + size, posy + size, posz],
       [posx + size, posy, posz],
-      [posx + size, posy, posz + size]
-    ],
-    attributeByteCount: 0
-  },
-  // drawCeil
-  {
-    normal: [0, 1, 0],
-    verts: [
-      [posx, posy + height, posz + size],
-      [posx + size, posy + height, posz + size],
-      [posx, posy + height, posz]
     ],
     attributeByteCount: 0
   }, {
-    normal: [0, 1, 0],
+    normal: [0, 0, 1],
     verts: [
-      [posx + size, posy + height, posz + size],
-      [posx + size, posy + height, posz],
-      [posx, posy + height, posz]
+      [posx, posy + size, posz + height],
+      [posx, posy, posz + height],
+      [posx + size, posy + size, posz + height],
+    ],
+    attributeByteCount: 0
+  }, {
+    normal: [0, 0, 1],
+    verts: [
+      [posx + size, posy + size, posz + height],
+      [posx, posy, posz + height],
+      [posx + size, posy, posz + height],
     ],
     attributeByteCount: 0
   }]
   
-  // drawTopWall
   if (shouldDraw.top) {
     facets.push({
-      normal: [0, 0, 1],
+      normal: [0, -1, 0],
       verts: [
         [posx, posy, posz],
-        [posx + size, posy + height, posz],
-        [posx + size, posy, posz]
+        [posx + size, posy, posz],
+        [posx + size, posy, posz + height],
       ],
       attributeByteCount: 0
     }, {
-      normal: [0, 0, 1],
+      normal: [0, -1, 0],
       verts: [
         [posx, posy, posz],
-        [posx, posy + height, posz],
-        [posx + size, posy + height, posz]
+        [posx + size, posy, posz + height],
+        [posx, posy, posz + height],
       ],
       attributeByteCount: 0
     })
@@ -71,61 +69,59 @@ const createCube = ({origins, size, height, walls = defaultWalls}) => {
   
   if (shouldDraw.bottom) {
     facets.push({
-      normal: [0, 0, -1],
+      normal: [0, 1, 0],
       verts: [
-        [posx + size, posy, posz + size],
-        [posx + size, posy + height, posz + size],
-        [posx, posy, posz + size]
+        [posx + size, posy + size, posz],
+        [posx, posy + size, posz],
+        [posx + size, posy + size, posz + height],
       ],
       attributeByteCount: 0
     }, {
-      normal: [0, 0, -1],
+      normal: [0, 1, 0],
       verts: [
-        [posx + size, posy + height, posz + size],
-        [posx, posy + height, posz + size],
-        [posx, posy, posz + size]
+        [posx + size, posy + size, posz + height],
+        [posx, posy + size, posz],
+        [posx, posy + size, posz + height],
       ],
       attributeByteCount: 0
     })
   }
   
-  // drawLeftWall
   if (shouldDraw.left) {
     facets.push({
       normal: [-1, 0, 0],
       verts: [
-        [posx, posy + height, posz + size],
-        [posx, posy + height, posz],
-        [posx, posy, posz]
+        [posx, posy + size, posz + height],
+        [posx, posy, posz],
+        [posx, posy, posz + height],
       ],
       attributeByteCount: 0
     }, {
       normal: [-1, 0, 0],
       verts: [
-        [posx, posy, posz + size],
-        [posx, posy + height, posz + size],
-        [posx, posy, posz]
+        [posx, posy + size, posz],
+        [posx, posy, posz],
+        [posx, posy + size, posz + height],
       ],
       attributeByteCount: 0
     })
   }
   
-  // drawRightWall
   if (shouldDraw.right) {
     facets.push({
       normal: [1, 0, 0],
       verts: [
         [posx + size, posy, posz],
-        [posx + size, posy + height, posz],
-        [posx + size, posy + height, posz + size]
+        [posx + size, posy + size, posz + height],
+        [posx + size, posy, posz + height],
       ],
       attributeByteCount: 0
     }, {
       normal: [1, 0, 0],
       verts: [
         [posx + size, posy, posz],
-        [posx + size, posy + height, posz + size],
-        [posx + size, posy, posz + size]
+        [posx + size, posy + size, posz],
+        [posx + size, posy + size, posz + height],
       ],
       attributeByteCount: 0
     })
@@ -150,8 +146,7 @@ const qr3D = (...params) => {
     options = {...opts, text: params[0]}
   }
   const {text, bitSize = 4, height = 2, base = 2 } = options
-  const QRCreate = QRCode ? QRCode.create : window.QRCode.create
-  const code = JSON.parse(JSON.stringify(QRCreate(text)))
+  const code = JSON.parse(JSON.stringify(QRCode.create(text)))
   const codeSize = code.modules.size
   const contentData = code.modules.data
   const codeContent = contentData.data ? contentData.data.join('') : Object.values(contentData).join('')
@@ -164,20 +159,21 @@ const qr3D = (...params) => {
   }
 
   // create base
-  const facets = [...createCube({
+  const facets = base > 0 ? [...createCube({
     origins: [0, 0, 0],
     size: bitSize * codeSize,
     height: base
-  })]
+  })] : []
 
   // create 3d qrcode
   for (let i = 0; i < codeSize; ++i) {
     for (let j = 0; j < codeSize; ++j) {
       if (matrix[i][j] === 1) {
         facets.push(...createCube({
-          origins: [i * bitSize, base, j * bitSize],
+          origins: [i * bitSize, j * bitSize, base],
           size: bitSize,
           height: height,
+          normalRatio: .5,
           walls: {
             top: j === 0 || matrix[i][j-1] === 0,
             bottom: j === codeSize - 1 || matrix[i][j+1] === 0,
