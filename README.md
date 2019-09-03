@@ -1,10 +1,18 @@
 # qr3D
 
-A simple library to generate 3D printable QR codes !
+A simple library to generate 3D printable QR codes on both NodeJS and browser web apps!
 
 [![sample](https://raw.githubusercontent.com/kaelhem/qr3d/master/sample.png)](https://github.com/kaelhem/qr3d/blob/master/sample.stl)
 
-It works on NodeJS and web-browser based apps.
+## Install
+
+```bash
+# with npm
+npm i qr3d --save
+
+# or with yarn:
+yarn add qr3d
+```
 
 ## How it works?
 
@@ -28,7 +36,14 @@ const blob = new Blob([qr3dAscii], {type: 'text/plain;charset=utf-8'})
 saveAs(blob, 'sample.stl')
 ```
 
-See more samples in _samples_ folder.
+### Old good web
+
+```html
+<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/qr3d@1.0.0/dist/qr3d.umd.js"></script>
+```
+--
+
+You can also have a look at the _samples_ folder.
 
 ## Options
 
@@ -52,7 +67,7 @@ _options_ parameters are :
 
 ## Contributing
 
-Contributions in any form are welcome! If you find a bug, please [file an issue.](https://github.com/kaelhem/katpat/issues)
+Contributions in any form are welcome! If you find a bug, please [file an issue.](https://github.com/kaelhem/qr3d/issues)
 
 ## License
 
