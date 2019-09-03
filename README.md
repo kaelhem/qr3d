@@ -1,6 +1,5 @@
 ![logo](https://raw.githubusercontent.com/kaelhem/qr3d/master/resources/qr3d-logo-256.png)
 
-# qr3D
 
 A simple library to generate 3D printable QR codes on both NodeJS and browser web apps!
 
