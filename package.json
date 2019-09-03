@@ -1,7 +1,7 @@
 {
   "name": "qr3d",
-  "version": "1.0.0",
-  "description": "This library provides an automated process to create 3D printables QR codes on both NodeJS and web.",
+  "version": "1.0.1",
+  "description": "Automated process to create 3D printables QR-codes in .stl on both NodeJS and web.",
   "author": "kaelhem@gmail.com",
   "license": "MIT",
   "source": "src/index.js",
