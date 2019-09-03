@@ -11,8 +11,7 @@
   "module": "dist/qr3d.m.js",
   "scripts": {
     "build": "microbundle --external all",
-    "dev": "microbundle watch",
-    "deploy": "yarn build && git add . && git commit -m \"bump version before publish\" && git push && npm publish"
+    "dev": "microbundle watch"
   },
   "dependencies": {
     "qrcode": "^1.4.1"
