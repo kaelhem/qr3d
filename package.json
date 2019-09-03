@@ -1,6 +1,6 @@
 {
   "name": "qr3d",
-  "version": "1.0.4",
+  "version": "1.0.5",
   "description": "Automated process to create 3D printables QR-codes in .stl on both NodeJS and web.",
   "author": "kaelhem@gmail.com",
   "license": "MIT",
@@ -12,7 +12,7 @@
   "scripts": {
     "build": "microbundle --external all",
     "dev": "microbundle watch",
-    "publish": "yarn build && git push && npm publish"
+    "deploy": "yarn build && git add . && git commit -m \"bump version before publish\" && git push && npm publish"
   },
   "dependencies": {
     "qrcode": "^1.4.1"
