@@ -16,7 +16,7 @@
 
       document.getElementById('button').addEventListener('click', () => {
         var text = document.getElementById('input').value
-        var qr3dAscii = qr3D(text, { base: 2, height: 2, bitSize: 4 });
+        var qr3dAscii = qr3D(text, { base: 2, height: 2, bitSize: 4, binary: true });
         var blob = new Blob([qr3dAscii], {type: "text/plain;charset=utf-8"});
         saveAs(blob, "sample.stl");
       })

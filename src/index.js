@@ -137,6 +137,7 @@ const createCube = ({origins, size, height, walls = defaultWalls}) => {
  * @param {Number} [opts.bitSize=4] - Width/Depth (mm) of the cells composing the QRcode grid
  * @param {Number} [opts.height=2] - Height (mm) of the qrcode part
  * @param {Number} [opts.base=2] - Height (mm) of the solid base part
+ * @param {Boolean} [opts.binary=false] - Sould output the .stl content as ASCII (default) or binary
  * @returns {String|Object} The .stl file content as a String if binary option is false or as Buffer/ArraBuffer (depending on platform) if true
  */
 const qr3D = (...params) => {
@@ -145,7 +146,7 @@ const qr3D = (...params) => {
     const opts = params.length > 1 ? params[1] : {}
     options = {...opts, text: params[0]}
   }
-  const {text, bitSize = 4, height = 2, base = 2 } = options
+  const {text, bitSize = 4, height = 2, base = 2, binary = false } = options
   const code = JSON.parse(JSON.stringify(QRCode.create(text)))
   const codeSize = code.modules.size
   const contentData = code.modules.data
@@ -184,7 +185,10 @@ const qr3D = (...params) => {
       }
     }
   }
-  return stlWriter('QRCode generated with qr3D - ' + text, facets)
+  return stlWriter(facets, {
+    description: 'QRCode generated with qr3D - ' + text,
+    binary
+  })
 }
 
 export default qr3D

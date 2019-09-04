@@ -3,7 +3,7 @@
 
 A simple library to generate 3D printable QR codes on both NodeJS and browser web apps!
 
-[![sample](https://raw.githubusercontent.com/kaelhem/qr3d/master/sample.png)](https://github.com/kaelhem/qr3d/blob/master/sample.stl)
+[![sample](https://raw.githubusercontent.com/kaelhem/qr3d/master/resources/sample.png)](https://github.com/kaelhem/qr3d/blob/master/resources/sample.stl)
 
 ## Install
 
@@ -26,7 +26,7 @@ const fs = require('fs')
 fs.writeFileSync('sample.stl', qr3D('https://www.npmjs.com/package/qr3d'))
 ```
 
-### Web
+### Modern web
 
 ```js
 import qr3D from 'qr3d'
@@ -37,16 +37,24 @@ const blob = new Blob([qr3dAscii], {type: 'text/plain;charset=utf-8'})
 saveAs(blob, 'sample.stl')
 ```
 
-### Old good web
+### Good old web
 
 ```html
 <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/qr3d@1.0.0/dist/qr3d.umd.js"></script>
+<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/file-saver@2.0.2/dist/FileSaver.min.js"></script>
+<script type="text/javascript">
+  var exportStl = function(content, options) {
+    var qr3dAscii = qr3D(content, options);
+    var blob = new Blob([qr3dAscii], {type: "text/plain;charset=utf-8"});
+    saveAs(blob, "sample.stl");
+  }
+</script>
 ```
 --
 
 You can also have a look at the _samples_ folder for a [react sample](https://github.com/kaelhem/qr3d/blob/master/samples/web/sample-react.js).
 
-### Options
+### API
 
 **qr3D** expose only one function (with the same name) which has 2 signatures:
 
@@ -54,16 +62,18 @@ You can also have a look at the _samples_ folder for a [react sample](https://gi
 * qr3D(_options_)
 
 _stringToEncode_ should be a string. It's the string to encode into QRCode.
-_options_ will copy this string into his "text" property. In this scenario, a given "text" in the _options_ object will be replaced.
+_options_ will copy this string into his "text" property.
+In this scenario, a given "text" in the _options_ object will be replaced by the _stringToEncode_ value.
 
 The _options_ parameters are :
 
-|name|type|default value|description|
-|---|---|---|---|
-|text|String|   |the text to QR-encode|
-|bitSize|Number|4|Width/Depth (mm) of the cells composing the QRcode grid|
-|height|Number|2|Height (mm) of the qrcode part|
-|base|Number|2|Height (mm) of the solid base part|
+|Name|Type|Default value|Description
+|---|---|---|---
+|**text**|`String`|   |the text to QR-encode
+|**bitSize**|`Number`|4|Width/Depth (mm) of the cells composing the QRcode grid
+|**height**|`Number`|2|Height (mm) of the qrcode part
+|**base**|`Number`|2|Height (mm) of the solid base part
+|**binary**|`Boolean`|false|Output .stl content as Buffer/ArrayBuffer (depending on platform)
 
 
 ## Contributing
