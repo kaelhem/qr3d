@@ -94,17 +94,21 @@ const toBinary = (facets, description = '') => {
   const { writeBuffer, getBuffer } = createBuffer(isNode, size)
   writeBuffer('string', description)
   // color head info
-  writeBuffer('string', 'COLOR=', 70)
-  writeBuffer('uint8', 0, 76) // R
-  writeBuffer('uint8', 0, 77) // G
-  writeBuffer('uint8', 255, 78) // B
-  writeBuffer('uint8', 255, 79) // A
+  writeBuffer('string', 'COLOR=', 57)
+  writeBuffer('uint8', 0, 63) // R
+  writeBuffer('uint8', 0, 64) // G
+  writeBuffer('uint8', 255, 65) // B
+  writeBuffer('uint8', 255, 66) // A
+  writeBuffer('string', ',MATERIAL=', 67)
+  writeBuffer('uint8', 0, 77) // R
+  writeBuffer('uint8', 0, 78) // G
+  writeBuffer('uint8', 255, 79) // B
 
   writeBuffer('uint32', count, 80)
 
   let offset = 84
-  const write = (value, type = 'float') => {
-    writeBuffer(type, value, offset)
+  const write = (value) => {
+    writeBuffer('float', value, offset)
     offset += 4
   }
   for (let j = 0; j<facets.length; j++) {
