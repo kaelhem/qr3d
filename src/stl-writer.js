@@ -52,20 +52,12 @@ const toASCII = (facets, description = '') => {
   return str.join('\n')
 }
 
-const str2ab = (str) => {
-  const array = new Uint8Array(str.length)
-  for(let i = 0; i < str.length; i++) {
-    array[i] = str.charCodeAt(i)
-  }
-  return array.buffer
-}
-
-const dataViewSetString = (dv, str) => {
-  const uint8Array = str2ab(str)
-  for (let i = 0; i < uint8Array.length; ++i) {
-    console.log(uint8Array[i])
-    dv.setUint8(i, uint8Array[i], true)
-  }
+const writeBufferString = (buffer, value = '', offset = 0) => {
+  let step = 0
+  value.split('').forEach(char => {
+    buffer.setUint8(offset + step, char.charCodeAt(0), true)
+    ++step
+  })
 }
 
 const createBuffer = (isNode, size) => {
@@ -76,10 +68,11 @@ const createBuffer = (isNode, size) => {
   return {
     writeBuffer: (type, value, offset = 0) => {
       switch (type) {
+        case 'uint8': return isNode ? buffer.writeUInt8LE(value, offset) : buffer.setUint8(offset, value, true)
         case 'uint16': return isNode ? buffer.writeUInt16LE(value, offset) : buffer.setUint16(offset, value, true)
         case 'uint32': return isNode ? buffer.writeUInt32LE(value, offset) : buffer.setUint32(offset, value, true)
         case 'float': return isNode ? buffer.writeFloatLE(value, offset) : buffer.setFloat32(offset, value, true)
-        case 'string': return isNode ? buffer.write(value, offset) : null // FIXME: should add description correctly with ArrayBuffer. dataViewSetString(offset, value)
+        case 'string': return isNode ? buffer.write(value, offset) : writeBufferString(buffer, value, offset)
         default: {
           throw new Error('No type specified')
         }
@@ -100,6 +93,13 @@ const toBinary = (facets, description = '') => {
   const size = 84 + count * 12 * 4 + count * 2
   const { writeBuffer, getBuffer } = createBuffer(isNode, size)
   writeBuffer('string', description)
+  // color head info
+  writeBuffer('string', 'COLOR=', 70)
+  writeBuffer('uint8', 0, 76) // R
+  writeBuffer('uint8', 0, 77) // G
+  writeBuffer('uint8', 255, 78) // B
+  writeBuffer('uint8', 255, 79) // A
+
   writeBuffer('uint32', count, 80)
 
   let offset = 84
@@ -118,15 +118,8 @@ const toBinary = (facets, description = '') => {
       write(vert[0])
       write(vert[1])
       write(vert[2])
-    }
-    /*
-    bits 0 to 4 are the intensity level for blue (0 to 31),
-    bits 5 to 9 are the intensity level for green (0 to 31),
-    bits 10 to 14 are the intensity level for red (0 to 31),
-    bit 15 is 1 if the color is valid, or 0 if the color is not valid (as with normal STL files).
-    */
-    const color = 0b1000010000100001 || facet.attributeByteCount || 0
-    writeBuffer('uint16', color, offset)
+    }    
+    writeBuffer('uint16', facet.attributeByteCount || 0, offset)
     offset += 2
   }
   return getBuffer()

@@ -8,7 +8,7 @@ const defaultWalls = {
   right: true
 }
 
-const createCube = ({origins, size, height, walls = defaultWalls}) => {
+const createCube = ({origins, size, height, walls = defaultWalls, color = 0}) => {
   const [ posx, posy, posz ] = origins
   const shouldDraw = {...defaultWalls, ...walls}
 
@@ -20,7 +20,7 @@ const createCube = ({origins, size, height, walls = defaultWalls}) => {
       [posx, posy + size, posz],
       [posx + size, posy + size, posz],
     ],
-    attributeByteCount: 0
+    attributeByteCount: color
   }, {
     normal: [0, 0, -1],
     verts: [
@@ -28,7 +28,7 @@ const createCube = ({origins, size, height, walls = defaultWalls}) => {
       [posx + size, posy + size, posz],
       [posx + size, posy, posz],
     ],
-    attributeByteCount: 0
+    attributeByteCount: color
   }, {
     normal: [0, 0, 1],
     verts: [
@@ -36,7 +36,7 @@ const createCube = ({origins, size, height, walls = defaultWalls}) => {
       [posx, posy, posz + height],
       [posx + size, posy + size, posz + height],
     ],
-    attributeByteCount: 0
+    attributeByteCount: color
   }, {
     normal: [0, 0, 1],
     verts: [
@@ -44,7 +44,7 @@ const createCube = ({origins, size, height, walls = defaultWalls}) => {
       [posx, posy, posz + height],
       [posx + size, posy, posz + height],
     ],
-    attributeByteCount: 0
+    attributeByteCount: color
   }]
   
   if (shouldDraw.top) {
@@ -55,7 +55,7 @@ const createCube = ({origins, size, height, walls = defaultWalls}) => {
         [posx + size, posy, posz],
         [posx + size, posy, posz + height],
       ],
-      attributeByteCount: 0
+      attributeByteCount: color
     }, {
       normal: [0, -1, 0],
       verts: [
@@ -63,7 +63,7 @@ const createCube = ({origins, size, height, walls = defaultWalls}) => {
         [posx + size, posy, posz + height],
         [posx, posy, posz + height],
       ],
-      attributeByteCount: 0
+      attributeByteCount: color
     })
   }
   
@@ -75,7 +75,7 @@ const createCube = ({origins, size, height, walls = defaultWalls}) => {
         [posx, posy + size, posz],
         [posx + size, posy + size, posz + height],
       ],
-      attributeByteCount: 0
+      attributeByteCount: color
     }, {
       normal: [0, 1, 0],
       verts: [
@@ -83,7 +83,7 @@ const createCube = ({origins, size, height, walls = defaultWalls}) => {
         [posx, posy + size, posz],
         [posx, posy + size, posz + height],
       ],
-      attributeByteCount: 0
+      attributeByteCount: color
     })
   }
   
@@ -95,7 +95,7 @@ const createCube = ({origins, size, height, walls = defaultWalls}) => {
         [posx, posy, posz],
         [posx, posy, posz + height],
       ],
-      attributeByteCount: 0
+      attributeByteCount: color
     }, {
       normal: [-1, 0, 0],
       verts: [
@@ -103,7 +103,7 @@ const createCube = ({origins, size, height, walls = defaultWalls}) => {
         [posx, posy, posz],
         [posx, posy + size, posz + height],
       ],
-      attributeByteCount: 0
+      attributeByteCount: color
     })
   }
   
@@ -115,7 +115,7 @@ const createCube = ({origins, size, height, walls = defaultWalls}) => {
         [posx + size, posy + size, posz + height],
         [posx + size, posy, posz + height],
       ],
-      attributeByteCount: 0
+      attributeByteCount: color
     }, {
       normal: [1, 0, 0],
       verts: [
@@ -123,7 +123,7 @@ const createCube = ({origins, size, height, walls = defaultWalls}) => {
         [posx + size, posy + size, posz],
         [posx + size, posy + size, posz + height],
       ],
-      attributeByteCount: 0
+      attributeByteCount: color
     })
   }
 
@@ -180,7 +180,14 @@ const qr3D = (...params) => {
             bottom: j === codeSize - 1 || matrix[i][j+1] === 0,
             left: i === 0 || matrix[i-1][j] === 0,
             right: i === codeSize - 1 || matrix[i+1][j] === 0
-          }
+          },
+          /*
+          bits 0 to 4 are the intensity level for blue (0 to 31),
+          bits 5 to 9 are the intensity level for green (0 to 31),
+          bits 10 to 14 are the intensity level for red (0 to 31),
+          bit 15 is 1 if the color is valid, or 0 if the color is not valid (as with normal STL files).
+          */
+          color: 0b0000000000111111
         }))
       }
     }
