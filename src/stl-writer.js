@@ -68,7 +68,7 @@ const createBuffer = (isNode, size) => {
   return {
     writeBuffer: (type, value, offset = 0) => {
       switch (type) {
-        case 'uint8': return isNode ? buffer.writeUInt8LE(value, offset) : buffer.setUint8(offset, value, true)
+        case 'uint8': return isNode ? buffer.writeUInt8(value, offset) : buffer.setUint8(offset, value, true)
         case 'uint16': return isNode ? buffer.writeUInt16LE(value, offset) : buffer.setUint16(offset, value, true)
         case 'uint32': return isNode ? buffer.writeUInt32LE(value, offset) : buffer.setUint32(offset, value, true)
         case 'float': return isNode ? buffer.writeFloatLE(value, offset) : buffer.setFloat32(offset, value, true)
