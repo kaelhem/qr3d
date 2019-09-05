@@ -27,12 +27,12 @@ const App = () => (
           <NavLink to='/faq'>faq</NavLink> |
           <NavLink to='/contact'>contact</NavLink>
         */}
-          <img alt='Logo' src={ Logo } width={ 140 } height={ 140 } />
+          <img alt='Logo' src={ Logo } width={ 80 } height={ 80 } />
           <Typography
             variant='h6'
             align='center'
             color='textPrimary'
-            style={{ width: '100%', paddingRight: 140, fontStyle: 'italic', color: '#888', fontWeight: 'normal' }}
+            style={{ width: '100%', paddingRight: 80, fontStyle: 'italic', color: '#888', fontWeight: 'normal', fontSize: '1em' }}
           >
             A tool to bring QR codes to 3D printing world
           </Typography>
@@ -43,7 +43,7 @@ const App = () => (
           />
         </Toolbar>
       </AppBar>
-      <div style={{ paddingTop: 140 }}>
+      <div style={{ paddingTop: 80 }}>
         <Switch>
           <Route exact path="/" component={ Make } />
           {/*}
