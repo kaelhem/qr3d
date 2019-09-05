@@ -1,6 +1,8 @@
 const qr3D = require('../../dist/qr3d')
 const fs = require('fs')
 
-const qr3dAscii = qr3D('https://www.npmjs.com/package/qr3d', { base: 2, height: 2, bitSize: 4, binary: true })
+const qr3dAscii = qr3D('https://www.npmjs.com/package/qr3d', { binary: false })
+fs.writeFileSync('sample-ascii.stl', qr3dAscii.data)
 
-fs.writeFileSync('sample.stl', qr3dAscii)
+const qr3dBinary = qr3D('https://www.npmjs.com/package/qr3d')
+fs.writeFileSync('sample-binary.stl', qr3dBinary.data)

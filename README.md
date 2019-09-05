@@ -87,7 +87,7 @@ Return value is an `Object` with these properties :
 ```js
 {
     data, // .stl content as String, Buffer or ArrayBuffer
-    qrSize // size of the qrcode grid generated
+    qrcode // the qrcode raw data
 }
 ```
 

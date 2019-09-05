@@ -122,7 +122,9 @@ const createCube = ({origins, size, height, walls = defaultWalls, color = 0}) =>
  * @param {Number} [opts.height=2] - Height (mm) of the qrcode part
  * @param {Number} [opts.base=2] - Height (mm) of the solid base part
  * @param {Boolean} [opts.binary=false] - Sould output the .stl content as ASCII (default) or binary
- * @returns {String|Object} The .stl file content as a String if binary option is false or as Buffer/ArraBuffer (depending on platform) if true
+ * @param {Array} [opts.baseColor=[0,0,0]] - Only if binary is true. RGB Array where R, G, and B are all 5 bits integers (between 0 and 31)
+ * @param {Array} [opts.qrColor=[31,0,0]] - Only if binary is true. RGB Array where R, G, and B are all 5 bits integers (between 0 and 31) 
+ * @returns {Object} The .stl file content as a String if binary option is false or as Buffer/ArraBuffer (depending on platform) if true
  */
 const qr3D = (...params) => {
   let [options] = params
@@ -189,7 +191,7 @@ const qr3D = (...params) => {
       description: 'QRCode generated with qr3D - ' + text,
       binary
     }),
-    qrSize: codeSize
+    qrcode: code
   }
 }
 
