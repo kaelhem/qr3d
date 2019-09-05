@@ -45,10 +45,12 @@ const App = () => (
       </AppBar>
       <div style={{ paddingTop: 140 }}>
         <Switch>
-          <Route exact path="/" component={ Home } />
+          <Route exact path="/" component={ Make } />
+          {/*}
           <Route path="/make" component={ Make } />
           <Route path="/faq" component={ Faq } />
           <Route path="/contact" component={ Contact } />
+        */}
           <Redirect to="/" />
         </Switch>
       </div>
