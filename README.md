@@ -56,7 +56,7 @@ You can also have a look at the _samples_ folder for a [react sample](https://gi
 
 ### API
 
-**qr3D** expose only one function (with the same name) which has 2 signatures:
+**qr3D** expose only one function with 2 signatures:
 
 * qr3D(_stringToEncode_, _options_)
 * qr3D(_options_)
@@ -69,12 +69,27 @@ The _options_ parameters are :
 
 |Name|Type|Default value|Description
 |---|---|---|---
-|**text**|`String`|   |the text to QR-encode
+|**text**|`String`|   |The text to QR-encode
 |**bitSize**|`Number`|4|Width/Depth (mm) of the cells composing the QRcode grid
 |**height**|`Number`|2|Height (mm) of the qrcode part
 |**base**|`Number`|2|Height (mm) of the solid base part
-|**binary**|`Boolean`|false|Output .stl content as Buffer/ArrayBuffer (depending on platform)
+|**binary**|`Boolean`|true|Output .stl content as Buffer/ArrayBuffer (depending on platform)
+|**baseColor\***|`Array`|[0, 0, 0]|<div>_this parameter is only available in binary format_ <br/>Color of the solid base part</div>
+|**qrColor\***|`Array`|[0, 0, 31]|<div>_this parameter is only available in binary format_ <br/>Color of the qrcode part</div>
 
+**\*** _baseColor_ and _qrColor_ are special parameters to add color information in .stl content output.
+The format of these colors is an _rgb_ array where _r_,_g_, and _b_ are 5 bits integers (between 0 and 31).
+> Those colors are not in the official specification and are **available in binary format only**. Furthermore there are generally not usued by softwares, so don't expect to much with it... 
+> [read more on wikipedia](https://en.wikipedia.org/wiki/STL_(file_format)#Color_in_binary_STL)
+
+Return value is an `Object` with these properties :
+
+```js
+{
+    data, // .stl content as String, Buffer or ArrayBuffer
+    qrSize // size of the qrcode grid generated
+}
+```
 
 ## Contributing
 

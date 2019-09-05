@@ -1,8 +1,13 @@
+import ColorUtils from './color-utils'
+
 /**
  * Heavily inspired by https://github.com/tmpvar/stl
  * Allow to create .stl content as ASCII or binary in NodeJS and browser.
  */
-const normalize = (x0, y0, z0, x1, y1, z1, x2, y2, z2) => {
+const computeNormal = ([a, b, c]) => {
+  const [x0, y0, z0] = a
+  const [x1, y1, z1] = b
+  const [x2, y2, z2] = c
   const [p1x, p1y, p1z] = [x1 - x0, y1 - y0, z1 - z0]
   const [p2x, p2y, p2z] = [x2 - x0, y2 - y0, z2 - z0]
   const [p3x, p3y, p3z] = [
@@ -25,12 +30,6 @@ const trim = (a) => {
   return a.trim()
 }
 
-const computeNormal = ({ verts: v }) => normalize(
-  v[0][0], v[0][1], v[0][2],
-  v[1][0], v[1][1], v[1][2],
-  v[2][0], v[2][1], v[2][2]
-)
-
 const exp = (x, y, z) => ([x, y, z].map(x => x.toExponential()))
 
 const toASCII = (facets, description = '') => {
@@ -38,13 +37,13 @@ const toASCII = (facets, description = '') => {
   const p = '      vertex '
   for (let j = 0; j < facets.length; j++) {
     const facet = facets[j]
-    const n = facet.normal || computeNormal(facet);
-    str.push('  facet normal ' + exp(n[0], n[1], n[2]).join(' '))
+    const n = facet.normal || computeNormal(facet.verts);
+    str.push('  facet normal ' + exp(...n).join(' '))
     str.push('    outer loop')
     const v = facet.verts
-    str.push(p + exp(v[0][0], v[0][1], v[0][2]).join(' '))
-    str.push(p + exp(v[1][0], v[1][1], v[1][2]).join(' '))
-    str.push(p + exp(v[2][0], v[2][1], v[2][2]).join(' '))
+    str.push(p + exp(...v[0]).join(' '))
+    str.push(p + exp(...v[1]).join(' '))
+    str.push(p + exp(...v[2]).join(' '))
     str.push('    endloop')
     str.push('  endfacet')
   }
@@ -55,7 +54,7 @@ const toASCII = (facets, description = '') => {
 const writeBufferString = (buffer, value = '', offset = 0) => {
   let step = 0
   value.split('').forEach(char => {
-    buffer.setUint8(offset + step, char.charCodeAt(0), true)
+    buffer.setUint8(offset + step, char.charCodeAt(0))
     ++step
   })
 }
@@ -68,7 +67,7 @@ const createBuffer = (isNode, size) => {
   return {
     writeBuffer: (type, value, offset = 0) => {
       switch (type) {
-        case 'uint8': return isNode ? buffer.writeUInt8(value, offset) : buffer.setUint8(offset, value, true)
+        case 'uint8': return isNode ? buffer.writeUInt8(value, offset) : buffer.setUint8(offset, value)
         case 'uint16': return isNode ? buffer.writeUInt16LE(value, offset) : buffer.setUint16(offset, value, true)
         case 'uint32': return isNode ? buffer.writeUInt32LE(value, offset) : buffer.setUint32(offset, value, true)
         case 'float': return isNode ? buffer.writeFloatLE(value, offset) : buffer.setFloat32(offset, value, true)
@@ -82,7 +81,7 @@ const createBuffer = (isNode, size) => {
   }
 }
 
-const toBinary = (facets, description = '') => {
+const toBinary = (facets, description, color, material) => {
   const count = facets.length
   let isNode = true
   try {
@@ -93,17 +92,17 @@ const toBinary = (facets, description = '') => {
   const size = 84 + count * 12 * 4 + count * 2
   const { writeBuffer, getBuffer } = createBuffer(isNode, size)
   writeBuffer('string', description)
-  // color head info
-  writeBuffer('string', 'COLOR=', 57)
-  writeBuffer('uint8', 0, 63) // R
-  writeBuffer('uint8', 0, 64) // G
-  writeBuffer('uint8', 255, 65) // B
-  writeBuffer('uint8', 255, 66) // A
-  writeBuffer('string', ',MATERIAL=', 67)
-  writeBuffer('uint8', 0, 77) // R
-  writeBuffer('uint8', 0, 78) // G
-  writeBuffer('uint8', 255, 79) // B
-
+  if (color) {
+    writeBuffer('string', ' COLOR=', 47)
+    writeBuffer('uint32', ColorUtils.getStlColor(color), 54)
+    if (material) {
+      writeBuffer('string', ',MATERIAL=', 58)
+      const [ diffuse, specular, ambient ] = material
+      writeBuffer('uint32', ColorUtils.getStlColor(diffuse), 68)
+      writeBuffer('uint32', ColorUtils.getStlColor(specular), 72)
+      writeBuffer('uint32', ColorUtils.getStlColor(ambient), 76)
+    }
+  }
   writeBuffer('uint32', count, 80)
 
   let offset = 84
@@ -113,7 +112,7 @@ const toBinary = (facets, description = '') => {
   }
   for (let j = 0; j<facets.length; j++) {
     const facet = facets[j]
-    const n = facet.normal || computeNormal(facet)
+    const n = facet.normal || computeNormal(facet.verts)
     write(n[0])
     write(n[1])
     write(n[2])
@@ -122,14 +121,35 @@ const toBinary = (facets, description = '') => {
       write(vert[0])
       write(vert[1])
       write(vert[2])
-    }    
-    writeBuffer('uint16', facet.attributeByteCount || 0, offset)
+    }
+
+    const facetColor = facet.color ? ColorUtils.getFacetColor(facet.color) : 0
+    writeBuffer('uint16', facetColor, offset)
     offset += 2
   }
   return getBuffer()
 }
 
 export default (facets, options = {}) => {
-  const { description = '', binary = false} = options
-  return binary ? toBinary(facets, description) : toASCII(facets, description)
+  const {
+    description = '',
+    binary = true,
+    color = [0,0,255,255],
+    material = null
+  } = options
+  if (binary) {
+    // colors exists only in unofficials specs and are exclusive to binary file format
+    // more details: https://en.wikipedia.org/wiki/STL_(file_format)#Color_in_binary_STL
+    const stlColor = Array.isArray(color) && color.length === 4 ? color : null
+    let stlMaterial = stlColor && Array.isArray(material) && material.length === 3 ? material : null
+    if (stlMaterial) {
+      const [a,b,c] = material
+      stlMaterial = stlMaterial && Array.isArray(a) && a.length === 3 ? material : null
+      stlMaterial = stlMaterial && Array.isArray(b) && b.length === 3 ? material : null
+      stlMaterial = stlMaterial && Array.isArray(c) && c.length === 3 ? material : null
+    }
+    return toBinary(facets, description, stlColor, stlMaterial)
+  } else {
+    return toASCII(facets, description)
+  }
 }

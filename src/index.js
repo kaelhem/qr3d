@@ -2,8 +2,10 @@ import QRCode from 'qrcode'
 import stlWriter from './stl-writer'
 
 const defaultWalls = {
-  top: true,
   bottom: true,
+  top: true,
+  back: true,
+  front: true,
   left: true,
   right: true
 }
@@ -11,123 +13,105 @@ const defaultWalls = {
 const createCube = ({origins, size, height, walls = defaultWalls, color = 0}) => {
   const [ posx, posy, posz ] = origins
   const shouldDraw = {...defaultWalls, ...walls}
+  const facets = []
 
-  // drawFloor
-  const facets = [{
-    normal: [0, 0, -1],
-    verts: [
-      [posx, posy, posz],
-      [posx, posy + size, posz],
-      [posx + size, posy + size, posz],
-    ],
-    attributeByteCount: color
-  }, {
-    normal: [0, 0, -1],
-    verts: [
-      [posx, posy, posz],
-      [posx + size, posy + size, posz],
-      [posx + size, posy, posz],
-    ],
-    attributeByteCount: color
-  }, {
-    normal: [0, 0, 1],
-    verts: [
-      [posx, posy + size, posz + height],
-      [posx, posy, posz + height],
-      [posx + size, posy + size, posz + height],
-    ],
-    attributeByteCount: color
-  }, {
-    normal: [0, 0, 1],
-    verts: [
-      [posx + size, posy + size, posz + height],
-      [posx, posy, posz + height],
-      [posx + size, posy, posz + height],
-    ],
-    attributeByteCount: color
-  }]
-  
+  if (shouldDraw.bottom) {
+    facets.push({
+      verts: [
+        [posx, posy, posz],
+        [posx, posy + size, posz],
+        [posx + size, posy + size, posz],
+      ]
+    }, {
+      verts: [
+        [posx, posy, posz],
+        [posx + size, posy + size, posz],
+        [posx + size, posy, posz],
+      ]
+    })
+  }
+
   if (shouldDraw.top) {
     facets.push({
-      normal: [0, -1, 0],
+      verts: [
+        [posx, posy + size, posz + height],
+        [posx, posy, posz + height],
+        [posx + size, posy + size, posz + height],
+      ]
+    }, {
+      verts: [
+        [posx + size, posy + size, posz + height],
+        [posx, posy, posz + height],
+        [posx + size, posy, posz + height],
+      ]
+    })
+  }
+  
+  if (shouldDraw.back) {
+    facets.push({
       verts: [
         [posx, posy, posz],
         [posx + size, posy, posz],
         [posx + size, posy, posz + height],
-      ],
-      attributeByteCount: color
+      ]
     }, {
-      normal: [0, -1, 0],
       verts: [
         [posx, posy, posz],
         [posx + size, posy, posz + height],
         [posx, posy, posz + height],
-      ],
-      attributeByteCount: color
+      ]
     })
   }
   
-  if (shouldDraw.bottom) {
+  if (shouldDraw.front) {
     facets.push({
-      normal: [0, 1, 0],
       verts: [
         [posx + size, posy + size, posz],
         [posx, posy + size, posz],
         [posx + size, posy + size, posz + height],
-      ],
-      attributeByteCount: color
+      ]
     }, {
-      normal: [0, 1, 0],
       verts: [
         [posx + size, posy + size, posz + height],
         [posx, posy + size, posz],
         [posx, posy + size, posz + height],
-      ],
-      attributeByteCount: color
+      ]
     })
   }
   
   if (shouldDraw.left) {
     facets.push({
-      normal: [-1, 0, 0],
       verts: [
         [posx, posy + size, posz + height],
         [posx, posy, posz],
         [posx, posy, posz + height],
-      ],
-      attributeByteCount: color
+      ]
     }, {
-      normal: [-1, 0, 0],
       verts: [
         [posx, posy + size, posz],
         [posx, posy, posz],
         [posx, posy + size, posz + height],
-      ],
-      attributeByteCount: color
+      ]
     })
   }
   
   if (shouldDraw.right) {
     facets.push({
-      normal: [1, 0, 0],
       verts: [
         [posx + size, posy, posz],
         [posx + size, posy + size, posz + height],
         [posx + size, posy, posz + height],
-      ],
-      attributeByteCount: color
+      ]
     }, {
-      normal: [1, 0, 0],
       verts: [
         [posx + size, posy, posz],
         [posx + size, posy + size, posz],
         [posx + size, posy + size, posz + height],
-      ],
-      attributeByteCount: color
+      ]
     })
   }
 
-  return facets
+  return facets.map(f => ({...f, color}))
 }
 
 /**
@@ -146,7 +130,21 @@ const qr3D = (...params) => {
     const opts = params.length > 1 ? params[1] : {}
     options = {...opts, text: params[0]}
   }
-  const {text, bitSize = 4, height = 2, base = 2, binary = false } = options
+  const defaultQrColor = [0, 0, 31]
+  const defaultBaseColor = [0, 0, 0]
+  const {
+    text,
+    bitSize = 4,
+    height = 2,
+    base = 2,
+    binary = true,
+    baseColor = 0,
+    qrColor = defaultQrColor
+  } = options
+  const colors = {
+    qr: Array.isArray(qrColor) && qrColor.length === 3 ? qrColor : defaultQrColor,
+    base: Array.isArray(baseColor) && baseColor.length === 3 ? baseColor : defaultBaseColor
+  }
   const code = JSON.parse(JSON.stringify(QRCode.create(text)))
   const codeSize = code.modules.size
   const contentData = code.modules.data
@@ -163,7 +161,8 @@ const qr3D = (...params) => {
   const facets = base > 0 ? [...createCube({
     origins: [0, 0, 0],
     size: bitSize * codeSize,
-    height: base
+    height: base,
+    color: colors.base
   })] : []
 
   // create 3d qrcode
@@ -174,28 +173,24 @@ const qr3D = (...params) => {
           origins: [i * bitSize, j * bitSize, base],
           size: bitSize,
           height: height,
-          normalRatio: .5,
           walls: {
-            top: j === 0 || matrix[i][j-1] === 0,
-            bottom: j === codeSize - 1 || matrix[i][j+1] === 0,
+            back: j === 0 || matrix[i][j-1] === 0,
+            front: j === codeSize - 1 || matrix[i][j+1] === 0,
             left: i === 0 || matrix[i-1][j] === 0,
             right: i === codeSize - 1 || matrix[i+1][j] === 0
           },
-          /*
-          bits 0 to 4 are the intensity level for blue (0 to 31),
-          bits 5 to 9 are the intensity level for green (0 to 31),
-          bits 10 to 14 are the intensity level for red (0 to 31),
-          bit 15 is 1 if the color is valid, or 0 if the color is not valid (as with normal STL files).
-          */
-          color: 0b0000000000111111
+          color: colors.qr
         }))
       }
     }
   }
-  return stlWriter(facets, {
-    description: 'QRCode generated with qr3D - ' + text,
-    binary
-  })
+  return {
+    data: stlWriter(facets, {
+      description: 'QRCode generated with qr3D - ' + text,
+      binary
+    }),
+    qrSize: codeSize
+  }
 }
 
 export default qr3D
