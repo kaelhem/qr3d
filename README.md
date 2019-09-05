@@ -1,75 +1,68 @@
-![logo](https://raw.githubusercontent.com/kaelhem/qr3d/master/resources/qr3d-logo-256.png)
+This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
+## Available Scripts
 
-A simple library to generate 3D printable QR codes on both NodeJS and browser web apps!
+In the project directory, you can run:
 
-[![sample](https://raw.githubusercontent.com/kaelhem/qr3d/master/sample.png)](https://github.com/kaelhem/qr3d/blob/master/sample.stl)
+### `npm start`
 
-## Install
+Runs the app in the development mode.<br>
+Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
 
-```bash
-# with npm
-npm i qr3d --save
+The page will reload if you make edits.<br>
+You will also see any lint errors in the console.
 
-# or with yarn:
-yarn add qr3d
-```
+### `npm test`
 
-## Use
+Launches the test runner in the interactive watch mode.<br>
+See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
 
-### NodeJs
+### `npm run build`
 
-```js
-const qr3D = require('qr3d')
-const fs = require('fs')
+Builds the app for production to the `build` folder.<br>
+It correctly bundles React in production mode and optimizes the build for the best performance.
 
-fs.writeFileSync('sample.stl', qr3D('https://www.npmjs.com/package/qr3d'))
-```
+The build is minified and the filenames include the hashes.<br>
+Your app is ready to be deployed!
 
-### Web
+See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
 
-```js
-import qr3D from 'qr3d'
-import { saveAs } from 'file-saver'
+### `npm run eject`
 
-const qr3dAscii = qr3D(content)
-const blob = new Blob([qr3dAscii], {type: 'text/plain;charset=utf-8'})
-saveAs(blob, 'sample.stl')
-```
+**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
 
-### Old good web
+If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
 
-```html
-<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/qr3d@1.0.0/dist/qr3d.umd.js"></script>
-```
---
+Instead, it will copy all the configuration files and the transitive dependencies (Webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
 
-You can also have a look at the _samples_ folder for a [react sample](https://github.com/kaelhem/qr3d/blob/master/samples/web/sample-react.js).
+You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
 
-### Options
+## Learn More
 
-**qr3D** expose only one function (with the same name) which has 2 signatures:
+You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
 
-* qr3D(_stringToEncode_, _options_)
-* qr3D(_options_)
+To learn React, check out the [React documentation](https://reactjs.org/).
 
-_stringToEncode_ should be a string. It's the string to encode into QRCode.
-_options_ will copy this string into his "text" property. In this scenario, a given "text" in the _options_ object will be replaced.
+### Code Splitting
 
-The _options_ parameters are :
+This section has moved here: https://facebook.github.io/create-react-app/docs/code-splitting
 
-|name|type|default value|description|
-|---|---|---|---|
-|text|String|   |the text to QR-encode|
-|bitSize|Number|4|Width/Depth (mm) of the cells composing the QRcode grid|
-|height|Number|2|Height (mm) of the qrcode part|
-|base|Number|2|Height (mm) of the solid base part|
+### Analyzing the Bundle Size
 
+This section has moved here: https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size
 
-## Contributing
+### Making a Progressive Web App
 
-Contributions in any form are welcome! If you find a bug, please [file an issue.](https://github.com/kaelhem/qr3d/issues)
+This section has moved here: https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app
 
-## License
+### Advanced Configuration
 
-This project is licensed under the MIT license. See the [LICENSE file](./LICENSE.md) for more details.
+This section has moved here: https://facebook.github.io/create-react-app/docs/advanced-configuration
+
+### Deployment
+
+This section has moved here: https://facebook.github.io/create-react-app/docs/deployment
+
+### `npm run build` fails to minify
+
+This section has moved here: https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify

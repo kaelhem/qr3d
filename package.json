@@ -1,22 +1,48 @@
 {
-  "name": "qr3d",
-  "version": "1.0.5",
-  "description": "Automated process to create 3D printables QR-codes in .stl on both NodeJS and web.",
-  "author": "kaelhem@gmail.com",
-  "license": "MIT",
-  "source": "src/index.js",
-  "main": "dist/qr3d.js",
-  "umd:main": "dist/qr3d.umd.js",
-  "unpkg": "dist/qr3d.umd.js",
-  "module": "dist/qr3d.m.js",
-  "scripts": {
-    "build": "microbundle --external all",
-    "dev": "microbundle watch"
-  },
+  "name": "qr3d-demo",
+  "version": "0.1.0",
+  "private": true,
   "dependencies": {
-    "qrcode": "^1.4.1"
+    "@material-ui/core": "^4.4.0",
+    "@material-ui/icons": "^4.2.1",
+    "fast-deep-equal": "^2.0.1",
+    "file-saver": "^2.0.2",
+    "fork-me-on-github": "^1.0.6",
+    "qr3d": "^1.1.3",
+    "react": "^16.9.0",
+    "react-dom": "^16.9.0",
+    "react-flexview": "^4.0.3",
+    "react-helmet": "^5.2.1",
+    "react-hover-observer": "^2.1.1",
+    "react-router-dom": "^5.0.1",
+    "react-scripts": "3.1.1",
+    "react-sizes": "^2.0.0",
+    "stl-viewer": "git+https://github.com/chiedolabs/react-stl-viewer#master",
+    "styled-components": "^4.3.2"
+  },
+  "scripts": {
+    "postbuild": "react-snap",
+    "start": "react-scripts start",
+    "build": "react-scripts build",
+    "test": "react-scripts test",
+    "eject": "react-scripts eject"
+  },
+  "eslintConfig": {
+    "extends": "react-app"
+  },
+  "browserslist": {
+    "production": [
+      ">0.2%",
+      "not dead",
+      "not op_mini all"
+    ],
+    "development": [
+      "last 1 chrome version",
+      "last 1 firefox version",
+      "last 1 safari version"
+    ]
   },
   "devDependencies": {
-    "microbundle": "^0.12.0-next.6"
+    "react-snap": "^1.23.0"
   }
 }
