@@ -23,7 +23,8 @@ yarn add qr3d
 const qr3D = require('qr3d')
 const fs = require('fs')
 
-fs.writeFileSync('sample.stl', qr3D('https://www.npmjs.com/package/qr3d'))
+const stl = qr3D('https://www.npmjs.com/package/qr3d').data
+fs.writeFileSync('sample.stl', stl)
 ```
 
 ### Modern web
@@ -32,9 +33,8 @@ fs.writeFileSync('sample.stl', qr3D('https://www.npmjs.com/package/qr3d'))
 import qr3D from 'qr3d'
 import { saveAs } from 'file-saver'
 
-const qr3dAscii = qr3D(content)
-const blob = new Blob([qr3dAscii], {type: 'text/plain;charset=utf-8'})
-saveAs(blob, 'sample.stl')
+const stl = qr3D(content).data
+saveAs(new Blob([stl], {type: 'text/plain;charset=utf-8'}), 'sample.stl')
 ```
 
 ### Good old web
@@ -44,9 +44,8 @@ saveAs(blob, 'sample.stl')
 <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/file-saver@2.0.2/dist/FileSaver.min.js"></script>
 <script type="text/javascript">
   var exportStl = function(content, options) {
-    var qr3dAscii = qr3D(content, options);
-    var blob = new Blob([qr3dAscii], {type: "text/plain;charset=utf-8"});
-    saveAs(blob, "sample.stl");
+    var stl = qr3D(content, options).data;
+    saveAs(new Blob([stl], {type: "text/plain;charset=utf-8"}), "sample.stl");
   }
 </script>
 ```
