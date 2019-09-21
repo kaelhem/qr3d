@@ -9,10 +9,10 @@ import {
 } from '@material-ui/core'
 
 // pages
-import Home from 'pages/home'
+//import Home from 'pages/home'
 import Make from 'pages/make'
-import Faq from 'pages/faq'
-import Contact from 'pages/contact'
+//import Faq from 'pages/faq'
+//import Contact from 'pages/contact'
 
 import Logo from 'assets/logo.svg'
 

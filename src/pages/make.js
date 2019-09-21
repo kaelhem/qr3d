@@ -35,10 +35,11 @@ const MakeView = ({ width, height }) => {
   const [qrData, setQrData] = useState(qr3D({binary: true, ...options}))
 
   const handleChange = (name, value) => {
-    console.log(name, value)
     const newOptions = { ...options, [name]: value }
+    if (!newOptions.text) {
+      newOptions.text = '.'
+    }
     if (!equal(options, newOptions)) {
-      
       setOptions(newOptions)
       setTimeout(() => {
         setQrData(null)
@@ -84,7 +85,7 @@ const MakeView = ({ width, height }) => {
                   Content
                 </Typography>
                 <TextField
-                  value={ options.text }
+                  value={ options.text !== '.' ? options.text : '' }
                   onChange={ ({target}) => handleChange('text', target.value) }
                   margin="normal"
                   fullWidth
@@ -130,7 +131,7 @@ const MakeView = ({ width, height }) => {
       </Container>
       <div style={{ position: 'absolute', zIndex: -1, top: 0 }}>
         <Fragment>
-        { navigator.userAgent !== 'ReactSnap' && qrData && (
+        { navigator.userAgent !== 'ReactSnap' && qrData &&  (
           <STLViewer
             model={ qrData.data.buffer }
             width={ width }
@@ -145,16 +146,18 @@ const MakeView = ({ width, height }) => {
         )}
         </Fragment>
       </div>
-      <Fab
-        variant="extended"
-        color={'primary'}
-        aria-label='export'
-        style={{ position: 'absolute', bottom: 25, right: 25 }}
-        onClick={ exportStl }
-      >
-        Export
-        <GetAppIcon />
-      </Fab>
+      { qrData && options.text !== '.' && (
+        <Fab
+          variant="extended"
+          color={'primary'}
+          aria-label='export'
+          style={{ position: 'absolute', bottom: 25, right: 25 }}
+          onClick={ exportStl }
+        >
+          Export
+          <GetAppIcon />
+        </Fab>
+      )}
     </FlexView>
   )
 }
