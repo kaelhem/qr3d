@@ -141,7 +141,9 @@ const qr3D = (...params) => {
     base = 2,
     binary = true,
     baseColor = 0,
-    qrColor = defaultQrColor
+    margin = 2,
+    qrColor = defaultQrColor,
+    handle
   } = options
   const colors = {
     qr: Array.isArray(qrColor) && qrColor.length === 3 ? qrColor : defaultQrColor,
@@ -162,27 +164,33 @@ const qr3D = (...params) => {
   // create base
   const facets = base > 0 ? [...createCube({
     origins: [0, 0, 0],
-    size: bitSize * codeSize,
+    size: bitSize * codeSize + margin * 2,
     height: base,
-    color: colors.base
+    color: colors.base,
   })] : []
+
+  if (handle && handle.facets && Array.isArray(handle.facets)) {
+    facets.push(...handle.facets.map(f => ({...f, color: colors.base})))
+  }
 
   // create 3d qrcode
   for (let i = 0; i < codeSize; ++i) {
     for (let j = 0; j < codeSize; ++j) {
+      let cubeOptions = {
+        origins: [margin + i * bitSize, margin + j * bitSize, base],
+        size: bitSize,
+        height: height
+      }
       if (matrix[i][j] === 1) {
-        facets.push(...createCube({
-          origins: [i * bitSize, j * bitSize, base],
-          size: bitSize,
-          height: height,
-          walls: {
-            back: j === 0 || matrix[i][j-1] === 0,
-            front: j === codeSize - 1 || matrix[i][j+1] === 0,
-            left: i === 0 || matrix[i-1][j] === 0,
-            right: i === codeSize - 1 || matrix[i+1][j] === 0
-          },
-          color: colors.qr
-        }))
+        cubeOptions.color = colors.qr
+        cubeOptions.walls = {
+          bottom: false,
+          back: j === 0 || matrix[i][j-1] === 0,
+          front: j === codeSize - 1 || matrix[i][j+1] === 0,
+          left: i === 0 || matrix[i-1][j] === 0,
+          right: i === codeSize - 1 || matrix[i+1][j] === 0
+        }
+        facets.push(...createCube(cubeOptions))
       }
     }
   }

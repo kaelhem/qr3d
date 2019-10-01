@@ -33,22 +33,22 @@ const trim = (a) => {
 const exp = (x, y, z) => ([x, y, z].map(x => x.toExponential()))
 
 const toASCII = (facets, description = '') => {
-  const str = ['solid ' + description.trim()]
-  const p = '      vertex '
+  const str = 'solid ' + description.trim() + '\n'
   for (let j = 0; j < facets.length; j++) {
     const facet = facets[j]
-    const n = facet.normal || computeNormal(facet.verts);
-    str.push('  facet normal ' + exp(...n).join(' '))
-    str.push('    outer loop')
     const v = facet.verts
-    str.push(p + exp(...v[0]).join(' '))
-    str.push(p + exp(...v[1]).join(' '))
-    str.push(p + exp(...v[2]).join(' '))
-    str.push('    endloop')
-    str.push('  endfacet')
+    const n = facet.normal || computeNormal(v)
+    str +=
+    `facet normal ${exp(...n).join(' ')}
+      outer loop
+        vertex ${exp(...v[0]).join(' ')}
+        vertex ${exp(...v[1]).join(' ')}
+        vertex ${exp(...v[2]).join(' ')}
+      endloop
+    endfacet`
   }
-  str.push('endsolid')
-  return str.join('\n')
+  str += '\nendsolid'
+  return str
 }
 
 const writeBufferString = (buffer, value = '', offset = 0) => {
