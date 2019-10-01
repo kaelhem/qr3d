@@ -14,12 +14,15 @@ import {
   ExpansionPanel,
   ExpansionPanelSummary,
   ExpansionPanelDetails,
-  Fab
+  Fab,
+  Switch,
+  FormControlLabel
 } from '@material-ui/core'
 import {
   ExpandMore as ExpandMoreIcon,
   GetApp as GetAppIcon
 } from '@material-ui/icons'
+import handleData from '../assets/handle.json'
 
 const MakeView = ({ width, height }) => {
   const [isOptionHover, setOptionHover] = useState(false)
@@ -27,10 +30,12 @@ const MakeView = ({ width, height }) => {
   const [options, setOptions] = useState({
     text: 'https://github.com/kaelhem/qr3d',
     bitSize: 4,
+    margin: 2,
     height: 2,
     base: 2,
     baseColor: [0, 22, 11],
-    qrColor: [31, 3, 3]
+    qrColor: [31, 3, 3],
+    handle: handleData
   })
   const [qrData, setQrData] = useState(qr3D({binary: true, ...options}))
 
@@ -47,6 +52,14 @@ const MakeView = ({ width, height }) => {
       }, 0)
     }
   }
+
+  const addHandleChange = (value) => {
+    handleChange('handle', value ? handleData : null)
+  }
+
+  /*const qrHandleChange = name => event => {
+    setState({ ...state, [name]: event.target.checked });
+  };*/
 
   const exportStl = () => {
     const blob = new Blob([qrData.data], {type: 'text/plain;charset=utf-8'})
@@ -123,6 +136,28 @@ const MakeView = ({ width, height }) => {
                   min={1}
                   max={20}
                   onChange={ (_, value) => handleChange('bitSize', value) }
+                />
+                <Typography gutterBottom>
+                  QR margin  ({ options.margin }mm)
+                </Typography>
+                <Slider
+                  value={ options.margin }
+                  aria-labelledby="discrete-slider"
+                  valueLabelDisplay="auto"
+                  min={0}
+                  max={5}
+                  onChange={ (_, value) => handleChange('margin', value) }
+                />
+                <FormControlLabel
+                  control={
+                    <Switch
+                      checked={ options.handle !== null }
+                      onChange={ (_, value) => addHandleChange(value) }
+                      value="useHandle"
+                      color="primary"
+                    />
+                  }
+                  label="Use handle"
                 />
               </FlexView>
             </ExpansionPanelDetails>

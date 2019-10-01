@@ -7,7 +7,7 @@
     "fast-deep-equal": "^2.0.1",
     "file-saver": "^2.0.2",
     "fork-me-on-github": "^1.0.6",
-    "qr3d": "^1.1.3",
+    "qr3d": "^1.2.0",
     "react": "^16.9.0",
     "react-dom": "^16.9.0",
     "react-flexview": "^4.0.3",
