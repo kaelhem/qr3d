@@ -140,10 +140,11 @@ const qr3D = (...params) => {
     height = 2,
     base = 2,
     binary = true,
-    baseColor = 0,
+    baseColor = defaultBaseColor,
     margin = 2,
     qrColor = defaultQrColor,
-    handle
+    handle = null,
+    stlOptions = {}
   } = options
   const colors = {
     qr: Array.isArray(qrColor) && qrColor.length === 3 ? qrColor : defaultQrColor,
@@ -197,7 +198,8 @@ const qr3D = (...params) => {
   return {
     data: stereol.exportStl(facets, {
       description: 'QRCode generated with qr3D - ' + text,
-      binary
+      binary,
+      ...stlOptions
     }),
     qrcode: code
   }
