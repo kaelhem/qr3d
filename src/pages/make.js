@@ -35,7 +35,10 @@ const MakeView = ({ width, height }) => {
     base: 2,
     baseColor: [0, 22, 11],
     qrColor: [31, 3, 3],
-    handle: handleData
+    handle: handleData,
+    stlOptions: {
+      color: [0, 0, 255, 255]
+    }
   })
   const [qrData, setQrData] = useState(qr3D({binary: true, ...options}))
 
@@ -56,10 +59,6 @@ const MakeView = ({ width, height }) => {
   const addHandleChange = (value) => {
     handleChange('handle', value ? handleData : null)
   }
-
-  /*const qrHandleChange = name => event => {
-    setState({ ...state, [name]: event.target.checked });
-  };*/
 
   const exportStl = () => {
     const blob = new Blob([qrData.data], {type: 'text/plain;charset=utf-8'})

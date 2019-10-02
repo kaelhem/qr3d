@@ -8410,12 +8410,13 @@ q@^1.1.2:
   resolved "https://registry.yarnpkg.com/q/-/q-1.5.1.tgz#7e32f75b41381291d04611f1bf14109ac00651d7"
   integrity sha1-fjL3W0E4EpHQRhHxvxQQmsAGUdc=
 
-qr3d@^1.2.0:
-  version "1.2.0"
-  resolved "https://registry.yarnpkg.com/qr3d/-/qr3d-1.2.0.tgz#931c501b4867746b6cd7a1945c3a6ea03dcdba95"
-  integrity sha512-fa4GhiDtDgTeg2Qxu0c+tKwJSp+PlxfzF8b4SxvqGblf/kMIxhGcD4KPScw8KhnTKBjZg0LR+LhmsTYC4iqi7g==
+qr3d@^1.3.1:
+  version "1.3.1"
+  resolved "https://registry.yarnpkg.com/qr3d/-/qr3d-1.3.1.tgz#11d48f9ab93db33a14c0c262521201509fb4d770"
+  integrity sha512-Th396ATjWU2eDMitQmdqDeVOap0IB0xuRufTzP5FknSOH/1Ta/nIy4vG5srGuYg8WvHAAxyj+L//PBVHLfI0fw==
   dependencies:
     qrcode "^1.4.1"
+    stereol "^0.1.1"
 
 qrcode@^1.4.1:
   version "1.4.1"
@@ -9655,6 +9656,11 @@ stealthy-require@^1.1.1:
   version "1.1.1"
   resolved "https://registry.yarnpkg.com/stealthy-require/-/stealthy-require-1.1.1.tgz#35b09875b4ff49f26a777e509b3090a3226bf24b"
   integrity sha1-NbCYdbT/SfJqd35QmzCQoyJr8ks=
+
+stereol@^0.1.1:
+  version "0.1.1"
+  resolved "https://registry.yarnpkg.com/stereol/-/stereol-0.1.1.tgz#de3ad10720aa2ecbfc064b5006a01b50b26ae208"
+  integrity sha512-S96n2Y0lbcA95SCGPtwDyaZu/tFJkWlURobizEoc571nrkmfxp3KdkHdRGPwNaWX2dUqiBUP9/BvLuWvPFuR6A==
 
 "stl-viewer@git+https://github.com/chiedolabs/react-stl-viewer#master":
   version "0.12.0"
