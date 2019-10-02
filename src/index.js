@@ -1,5 +1,5 @@
 import QRCode from 'qrcode'
-import stlWriter from './stl-writer'
+import stereol from 'stereol'
 
 const defaultWalls = {
   bottom: true,
@@ -195,7 +195,7 @@ const qr3D = (...params) => {
     }
   }
   return {
-    data: stlWriter(facets, {
+    data: stereol.exportStl(facets, {
       description: 'QRCode generated with qr3D - ' + text,
       binary
     }),
